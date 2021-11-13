@@ -4,9 +4,14 @@ use std::env;
 use std::path::Path;
 
 use server;
+use browser;
 
 fn spawn_server(dir: &Path) {
     server::run(dir);
+}
+
+fn start_browser() {
+    browser::start(); 
 }
 
 fn main() {
@@ -28,4 +33,6 @@ fn main() {
 
         spawn_server(path);
     }
+
+    start_browser();
 }

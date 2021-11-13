@@ -7,11 +7,12 @@ edition = "2018"
 
 [workspace]
 members = [
-    "ui",
     "md",
+    "browser",
     "server"
 ]
 
 [dependencies]
 getopts = "0.2"
 server = { path="server" }
+browser = { path="browser" }
