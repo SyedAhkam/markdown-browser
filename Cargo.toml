@@ -1,5 +1,5 @@
 [package]
-name = "markdown-browser"
+name = "md_browser"
 version = "0.1.0"
 edition = "2018"
 
@@ -9,10 +9,11 @@ edition = "2018"
 members = [
     "md",
     "browser",
-    "server"
+    "server",
+    "protocol"
 ]
 
 [dependencies]
 getopts = "0.2"
-server = { path="server" }
-browser = { path="browser" }
+md_browser_server = { path="server" }
+md_browser_browser = { path="browser" }

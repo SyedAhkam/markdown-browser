@@ -3,8 +3,8 @@ use getopts::Options;
 use std::env;
 use std::path::Path;
 
-use server;
-use browser;
+use md_browser_server as server;
+use md_browser_browser as browser;
 
 fn spawn_server(dir: &Path) {
     server::run(dir);

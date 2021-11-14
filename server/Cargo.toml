@@ -1,5 +1,5 @@
 [package]
-name = "server"
+name = "md_browser_server"
 version = "0.0.0"
 edition = "2018"
 
@@ -7,11 +7,11 @@ edition = "2018"
 
 
 [lib]
-name = "server"
+name = "md_browser_server"
 path = "src/lib.rs"
 
 [[bin]]
-name = "server"
+name = "md_browser_server"
 path = "src/bin.rs"
 
 [dependencies]

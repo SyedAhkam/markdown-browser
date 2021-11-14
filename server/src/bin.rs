@@ -15,5 +15,5 @@ fn main() {
 
     path.canonicalize().expect("failed to parse path");
 
-    server::run(path);
+    md_browser_server::run(path);
 }
