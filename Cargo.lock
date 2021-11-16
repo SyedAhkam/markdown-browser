@@ -120,6 +120,9 @@ dependencies = [
 [[package]]
 name = "md_browser_browser"
 version = "0.0.0"
+dependencies = [
+ "md_browser_protocol",
+]
 
 [[package]]
 name = "md_browser_md"
@@ -138,7 +141,6 @@ name = "md_browser_server"
 version = "0.0.0"
 dependencies = [
  "md_browser_protocol",
- "protocol",
 ]
 
 [[package]]

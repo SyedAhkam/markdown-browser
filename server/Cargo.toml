@@ -16,4 +16,3 @@ path = "src/bin.rs"
 
 [dependencies]
 md_browser_protocol = { path="../protocol" }
-protocol = "3.1"

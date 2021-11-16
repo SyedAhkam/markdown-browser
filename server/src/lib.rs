@@ -4,23 +4,16 @@ use std::path::Path;
 use std::net::{TcpListener, TcpStream, Shutdown};
 use std::thread;
 
-use protocol::{Parcel, Enum};
 use md_browser_protocol::*;
 
-const SOCKET_ADRESS: &str = "127.0.0.1:3103";
+const SOCKET_ADDRESS: &str = "127.0.0.1:3103";
 
 fn handle_client(stream: TcpStream) {
-    let protocol_settings = protocol::Settings::default();
-    let mut protocol_connection = protocol::wire::stream::Connection::new(
-        stream,
-        protocol::wire::middleware::pipeline::default(),
-        protocol_settings
-    );
-    
-    protocol_connection.send_packet(&Packet::Handshake(Handshake)).unwrap();
-    
+    let mut protocol_connection = ProtocolConnection::new(stream);   
+    protocol_connection.send_packet(&Packet::Handshake(Handshake));
+
     loop {
-        if let Some(response) = protocol_connection.receive_packet().unwrap() {
+        if let Some(response) = protocol_connection.receive_packet() {
             println!("{:?}", response);
             break;
         }
@@ -54,7 +47,7 @@ fn handle_client(stream: TcpStream) {
 }
 
 pub fn run(dir: &Path) -> std::io::Result<()> {
-    let listener = TcpListener::bind(SOCKET_ADRESS)?;
+    let listener = TcpListener::bind(SOCKET_ADDRESS)?;
 
     for stream in listener.incoming() {
         match stream {
