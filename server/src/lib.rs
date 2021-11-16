@@ -9,13 +9,26 @@ use md_browser_protocol::*;
 const SOCKET_ADDRESS: &str = "127.0.0.1:3103";
 
 fn handle_client(stream: TcpStream) {
+    println!("Client connected!");
     let mut protocol_connection = ProtocolConnection::new(stream);   
     protocol_connection.send_packet(&Packet::Handshake(Handshake));
 
     loop {
         if let Some(response) = protocol_connection.receive_packet() {
-            println!("{:?}", response);
-            break;
+            println!("Recieved packet from client: {:?}", response);
+            match response {
+                Packet::Handshake(_) => (),
+                Packet::Hello(_) => protocol_connection.send_packet(&Packet::Hello(Hello)),
+                Packet::Goodbye(_) => {
+                    println!("bye");
+
+                    protocol_connection
+                        .into_inner()
+                        .into_inner()
+                        .shutdown(Shutdown::Both).unwrap(); // fixme
+                    break;
+                }
+            }
         }
     }
    
