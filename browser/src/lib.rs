@@ -3,23 +3,48 @@ use md_browser_protocol::{
     ProtocolConnection,
     Packet,
     Hello,
-    Goodbye
+    Request,
+    Response,
+    Goodbye,
+    Url
 };
 
-fn make_protocol_connection(address: &str) {
-    if let Some(tcp_connection) = TcpConnection::new(address) {
-        let mut protocol_connection = ProtocolConnection::new(tcp_connection.into_inner());
+fn wait_for_response(protocol_connection: &mut ProtocolConnection<Packet, std::net::TcpStream>) -> Response {
+    loop {
+        if let Some(data) = protocol_connection.receive_packet() {
+            match data {
+                Packet::Response(resp) => {
+                    println!("received response: {:?}", resp);
 
-        for _ in 1..=2 {
-            std::thread::sleep(std::time::Duration::from_secs(5));
-            protocol_connection.send_packet(&Packet::Hello(Hello));
-        }
+                    return resp;
+                },
+                _ => ()
+            };
+        };
 
-        protocol_connection.send_packet(&Packet::Goodbye(Goodbye { reason: "hehe".to_string() }))
+    }
+}
+
+fn request_md_doc(protocol_connection: &mut ProtocolConnection<Packet, std::net::TcpStream>, address: &str, filename: &str) {
+    protocol_connection
+        .send_packet(&Packet::Request(Request {
+            url: Url::new(address, filename) 
+        }))
+}
+
+fn make_protocol_connection(address: &str) -> Option<ProtocolConnection<Packet, std::net::TcpStream>> {
+    match TcpConnection::new(address) {
+        Some(tcp_connection) => Some(ProtocolConnection::new(tcp_connection.into_inner())),
+        None => None
     }
 }
 
 pub fn start() {
-    make_protocol_connection("localhost:3103");
+    let address = "localhost:3103";
+    if let Some(mut protocol_connection) = make_protocol_connection(&address) {
+        request_md_doc(&mut protocol_connection, &address, "index.md");
+        let response = wait_for_response(&mut protocol_connection);
+    }
+
     println!("Starting browser..");
 }

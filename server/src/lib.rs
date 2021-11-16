@@ -8,6 +8,11 @@ use md_browser_protocol::*;
 
 const SOCKET_ADDRESS: &str = "127.0.0.1:3103";
 
+fn return_response(protocol_connection: &mut ProtocolConnection<Packet, TcpStream>, request: &Request) {
+    let markdown_document = Markdown::from("# Hello".to_string());
+    protocol_connection.send_packet(&Packet::Response(Response { md: markdown_document }));
+}
+
 fn handle_client(stream: TcpStream) {
     println!("Client connected!");
     let mut protocol_connection = ProtocolConnection::new(stream);   
@@ -19,6 +24,11 @@ fn handle_client(stream: TcpStream) {
             match response {
                 Packet::Handshake(_) => (),
                 Packet::Hello(_) => protocol_connection.send_packet(&Packet::Hello(Hello)),
+                Packet::Request(req) => {
+                    println!("request recieved for: {}", req.url);
+                    return_response(&mut protocol_connection, &req);
+                },
+                Packet::Response(_) => (), // server sent the response itself
                 Packet::Goodbye(_) => {
                     println!("bye");
 
