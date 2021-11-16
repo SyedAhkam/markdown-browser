@@ -136,6 +136,10 @@ dependencies = [
 [[package]]
 name = "md_browser_server"
 version = "0.0.0"
+dependencies = [
+ "md_browser_protocol",
+ "protocol",
+]
 
 [[package]]
 name = "memchr"
