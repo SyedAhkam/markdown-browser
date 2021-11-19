@@ -7,3 +7,4 @@ edition = "2018"
 
 [dependencies]
 md_browser_protocol = { path="../protocol" }
+iced = "0.3"

@@ -9,6 +9,12 @@ use md_browser_protocol::{
     Url
 };
 
+fn send_goodbye(protocol_connection: &mut ProtocolConnection<Packet, std::net::TcpStream>) {
+    protocol_connection.send_packet(
+        &Packet::Goodbye(Goodbye { reason: "communication over".to_string() })
+    );
+}
+
 fn wait_for_response(protocol_connection: &mut ProtocolConnection<Packet, std::net::TcpStream>) -> Response {
     loop {
         if let Some(data) = protocol_connection.receive_packet() {
@@ -44,6 +50,7 @@ pub fn start() {
     if let Some(mut protocol_connection) = make_protocol_connection(&address) {
         request_md_doc(&mut protocol_connection, &address, "index.md");
         let response = wait_for_response(&mut protocol_connection);
+        send_goodbye(&mut protocol_connection);
     }
 
     println!("Starting browser..");
