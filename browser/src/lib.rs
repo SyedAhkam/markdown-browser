@@ -1,3 +1,5 @@
+mod gui;
+
 use md_browser_protocol::{
     TcpConnection,
     ProtocolConnection,
@@ -54,4 +56,8 @@ pub fn make_request(address: &str) -> Option<Response> {
         return Some(response)
     }
     None
+}
+
+pub fn start() {
+    gui::start().unwrap() 
 }
