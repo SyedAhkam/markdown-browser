@@ -45,13 +45,13 @@ fn make_protocol_connection(address: &str) -> Option<ProtocolConnection<Packet, 
     }
 }
 
-pub fn start() {
-    let address = "localhost:3103";
+pub fn make_request(address: &str) -> Option<Response> {
     if let Some(mut protocol_connection) = make_protocol_connection(&address) {
         request_md_doc(&mut protocol_connection, &address, "index.md");
         let response = wait_for_response(&mut protocol_connection);
         send_goodbye(&mut protocol_connection);
-    }
 
-    println!("Starting browser..");
+        return Some(response)
+    }
+    None
 }

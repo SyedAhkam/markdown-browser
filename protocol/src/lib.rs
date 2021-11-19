@@ -49,6 +49,10 @@ impl Markdown {
     pub fn from(string: String) -> Self {
         Self(string)
     }
+
+    pub fn display(&self) -> String {
+        self.to_string()
+    }
 }
 
 impl std::fmt::Display for Markdown {
