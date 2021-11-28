@@ -1,12 +1,12 @@
 use getopts::Options;
 
 use std::env;
-use std::path::Path;
+use std::path::PathBuf;
 
 use md_browser_server as server;
 use md_browser_browser as browser;
 
-fn spawn_server(dir: &Path) {
+fn spawn_server(dir: PathBuf) {
     server::run(dir);
 }
 
@@ -27,7 +27,7 @@ fn main() {
 
     if matches.opt_present("s") {
         let input = matches.opt_str("s").unwrap();
-        let path = Path::new(&input);
+        let path = PathBuf::from(&input);
 
         path.canonicalize().expect("failed to parse path");
 
